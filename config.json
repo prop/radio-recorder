@@ -1,0 +1,8 @@
+[
+  {
+    "name": "Simon_Underground",
+    "url": "http://www.kraftyradio.com/radio.pls",
+    "duration": 0.2,
+    "when": "00 * * * * *"
+  }
+]

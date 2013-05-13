@@ -1,0 +1,25 @@
+{
+  "name": "radio-recorder",
+  "version": "0.1.0",
+  "description": "Record internet radio streams and share records using rss",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/prop/radio-recorder.git"
+  },
+  "keywords": [
+    "radio",
+    "rip",
+    "rss"
+  ],
+  "dependencies" : {
+    "optimist": "*",
+    "dateformat": "*",
+    "cron": "*",
+  },
+  "author": "Roman Belyakov",
+  "license": "BSD"
+}
