@@ -28,7 +28,7 @@ var opts = require('optimist').
 
 var argv = opts.argv;
 
-var PLAYER = args.p;
+var PLAYER = argv.p;
 
 if (argv.D) {
   try {
