@@ -20,7 +20,7 @@ var opts = require('optimist').
   describe('D', 'Run in daemon mode').
   default('d', process.cwd()).
   alias('c', 'config').
-  describe('c', 'Duration of the record in minutes');
+  describe('c', 'Duration of the record in minutes').
   alias('p', 'player').
   describe('p', 'MPlayer binary').
   default('p', 'mplayer');
