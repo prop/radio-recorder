@@ -21,10 +21,15 @@ var opts = require('optimist').
   describe('D', 'Run in daemon mode').
   default('d', process.cwd()).
   alias('c', 'config').
-  describe('c', 'Duration of the record in minutes');
+  describe('c', 'Duration of the record in minutes').
+  alias('f', 'player').
+  describe('f', 'ffmpeg binary').
+  default('f', 'ffmpeg');
 
 
 var argv = opts.argv;
+
+var FFMPEG = argv.f;
 
 if (argv.D) {
   try {
@@ -59,9 +64,9 @@ if (argv.D) {
 
 function record(filename, url, duration) {
   var spawn = require('child_process').spawn,
-      recorder  = spawn('ffmpeg',
-                        ['-i', url, '-loop_input', '-t', duration, '-acodec',
-                         'copy', filename]);
+      ffmpeg_opts = ['-i', url, '-loop_input', '-t', duration, '-acodec',
+                         'copy', filename],
+      recorder  = spawn(FFMPEG, ffmpeg_opts);
   recorder.stderr.setEncoding('utf8');
   recorder.stdout.setEncoding('utf8');
   
