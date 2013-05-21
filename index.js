@@ -21,9 +21,14 @@ var opts = require('optimist').
   default('d', process.cwd()).
   alias('c', 'config').
   describe('c', 'Duration of the record in minutes');
+  alias('p', 'player').
+  describe('p', 'MPlayer binary').
+  default('p', 'mplayer');
 
 
 var argv = opts.argv;
+
+var PLAYER = args.p;
 
 if (argv.D) {
   try {
@@ -50,7 +55,7 @@ if (argv.D) {
 
 function record(filename, url, duration) {
   var spawn = require('child_process').spawn,
-  player  = spawn('mplayer',
+  player  = spawn(PLAYER,
                   ['-playlist', url, '-dumpfile', filename, '-dumpaudio']);
 
   player.on('close', function (code, signal) {
