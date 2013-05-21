@@ -56,11 +56,20 @@ if (argv.D) {
 function record(filename, url, duration) {
   var spawn = require('child_process').spawn,
   player  = spawn(PLAYER,
-                  ['-playlist', url, '-dumpfile', filename, '-dumpaudio']);
+                  ['-playlist', url, '-dumpfile', filename, '-dumpaudio',
+                   '-quiet']);
 
   player.on('close', function (code, signal) {
     console.log('child process terminated due to receipt of signal ',
                 signal, 'code', code);
+  });
+
+  player.stdout.on('data', function (data) {
+    console.log(data);
+  });
+  
+  player.stderr.on('data', function (data) {
+    console.error(data);
   });
   
   setTimeout(function(){
