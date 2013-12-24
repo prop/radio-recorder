@@ -1,12 +1,14 @@
 {
   "name": "radio-recorder",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Record internet radio streams and share records using rss",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "bin" : {"radio-recorder": "./index.js"},
+  "bin": {
+    "radio-recorder": "./index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/prop/radio-recorder.git"
