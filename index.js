@@ -5,29 +5,37 @@ var CronJob = require('cron').CronJob;
 var fs = require('fs');
 
 var opts = require('optimist').
-  usage('Usage: $0 [options]').
-  alias('o', 'output').
-  describe('o', 'Output file').
-  alias('u', 'url').
-  describe('u', 'Stream URL').
-  alias('l', 'duration').
-  describe('l','Duration of the record in seconds. '+
-           '"hh:mm:ss[.xxx]" syntax is also supported.').
-  default('l', 120).
-  alias('d', 'directory').
-  describe('d', 'Output directory').
-  boolean('D').
-  alias('D', 'daemon').
-  describe('D', 'Run in daemon mode').
-  default('d', process.cwd()).
-  alias('c', 'config').
-  describe('c', 'Duration of the record in minutes').
-  alias('f', 'player').
-  describe('f', 'ffmpeg binary').
-  default('f', 'ffmpeg');
+    usage('Usage: $0 [options]').
+    describe('h', 'Display the usage').
+    alias('h', 'help').
+    alias('o', 'output').
+    describe('o', 'Output file').
+    alias('u', 'url').
+    describe('u', 'Stream URL').
+    alias('l', 'duration').
+    describe('l','Duration of the record in seconds. '+
+             '"hh:mm:ss[.xxx]" syntax is also supported.').
+    default('l', 120).
+    alias('d', 'directory').
+    describe('d', 'Output directory').
+    boolean('D').
+    alias('D', 'daemon').
+    describe('D', 'Run in daemon mode').
+    default('d', process.cwd()).
+    alias('c', 'config').
+    describe('c', 'Duration of the record in minutes').
+    alias('f', 'player').
+    describe('f', 'ffmpeg binary').
+    default('f', 'ffmpeg');
 
 
 var argv = opts.argv;
+
+
+if (argv.help) {
+    opts.showHelp();
+    process.exit(0);
+}
 
 var FFMPEG = argv.f;
 
