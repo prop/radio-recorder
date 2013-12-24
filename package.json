@@ -18,7 +18,8 @@
   "dependencies": {
     "optimist": "*",
     "dateformat": "*",
-    "cron": "*"
+    "cron": "*",
+    "time": "*"
   },
   "author": "Roman Belyakov",
   "license": "BSD"

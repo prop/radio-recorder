@@ -11,7 +11,8 @@ var opts = require('optimist').
   alias('u', 'url').
   describe('u', 'Stream URL').
   alias('l', 'duration').
-  describe('l', 'Duration of the record in minutes').
+  describe('l','Duration of the record in seconds. '+
+           '"hh:mm:ss[.xxx]" syntax is also supported.').
   default('l', 120).
   alias('d', 'directory').
   describe('d', 'Output directory').
@@ -29,13 +30,21 @@ if (argv.D) {
   try {
     var config = parseConfig(argv.c);
     config.forEach(function(item){
-      var job = new CronJob(item.when, function(){
-        record(argv.d + '/' + item.name + '_' +
-               dateFormat(new Date(), 'isoDateTime') + '.mp3',
-               item.url,
-               item.duration);
-      });
+      var cronOpts = {
+        cronTime: item.when,
+        onTick: function(){
+          record(argv.d + '/' + item.name + '_' +
+                 dateFormat(new Date(), 'isoDateTime') + '.mp3',
+                 item.url,
+                 item.duration);
+        },
+        start: false
+      };
       
+      if (!!item.timeZone) cronOpts.timeZone = item.timeZone;
+      
+      var job = new CronJob(cronOpts);
+
       job.start();
     });
   } catch (e) {
@@ -50,17 +59,28 @@ if (argv.D) {
 
 function record(filename, url, duration) {
   var spawn = require('child_process').spawn,
-  player  = spawn('mplayer',
-                  ['-playlist', url, '-dumpfile', filename, '-dumpaudio']);
+      recorder  = spawn('ffmpeg',
+                        ['-i', url, '-loop_input', '-t', duration, '-acodec',
+                         'copy', filename]);
+  recorder.stderr.setEncoding('utf8');
+  recorder.stdout.setEncoding('utf8');
+  
+  // recorder.stdout.on('data', function(data){
+  //   console.log('stdout:', data);
+  // });
 
-  player.on('close', function (code, signal) {
+  recorder.stderr.on('data', function(data){
+    console.log('stderr:', data);
+  });
+  
+  recorder.on('close', function (code, signal) {
     console.log('child process terminated due to receipt of signal ',
                 signal, 'code', code);
   });
   
-  setTimeout(function(){
-    player.kill('SIGTERM');
-  }, duration * 60 * 1000);
+  // setTimeout(function(){
+  //   player.kill('SIGTERM');
+  // }, duration * 60 * 1000);
 }
 
 
