@@ -46,7 +46,11 @@ if (argv.D) {
       var cronOpts = {
         cronTime: item.when,
         onTick: function(){
-          record(argv.d + '/' + item.name + '_' +
+          var dir = argv.d;
+          if (!!item.directory) {
+            dir = item.directory;
+          }
+          record(dir + '/' + item.name + '_' +
                  dateFormat(new Date(), 'isoDateTime') + '.mp3',
                  item.url,
                  item.duration);
