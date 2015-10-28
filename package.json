@@ -1,6 +1,6 @@
 {
   "name": "radio-recorder",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "Record internet radio streams and share records using rss",
   "main": "index.js",
   "scripts": {
