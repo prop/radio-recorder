@@ -24,6 +24,8 @@ var opts = require('optimist').
     default('d', process.cwd()).
     alias('c', 'config').
     describe('c', 'Duration of the record in minutes').
+    alias('s', 'start').
+    describe('s', 'Start of recording').
     alias('f', 'player').
     describe('f', 'ffmpeg binary').
     default('f', 'ffmpeg');
@@ -68,16 +70,32 @@ if (argv.D) {
   }
     console.log('Daemon has started');
 } else {
-  var fn = argv.o || argv.d + '/record-' +
-    dateFormat(new Date(), 'isoDateTime') + '.mp3';
-  record(fn, argv.u, argv.l);
+  
+  var timeout = 0, length = argv.l;
+  
+  if (!!argv.s) {
+    var start = new Date(argv.s);
+    timeout = start - Date.now();
+    if (timeout < 0) {
+      console.error('Start time is in the past');
+      process.exit(1);
+    }
+    
+    console.log('Scheduling recording to', start);
+  }
+  
+  setTimeout(function(){
+    var fn = argv.o || argv.d + '/record-' +
+        dateFormat(new Date(), 'isoDateTime') + '.mp3';
+    record(fn, argv.u, argv.l);
+  }, timeout);
 }
 
 
 function record(filename, url, duration) {
   var spawn = require('child_process').spawn,
       ffmpeg_opts = ['-i', url, '-t', duration, '-acodec',
-                         'copy', filename],
+                         'copy', '-y', filename],
       recorder  = spawn(FFMPEG, ffmpeg_opts);
   recorder.stderr.setEncoding('utf8');
   recorder.stdout.setEncoding('utf8');
