@@ -57,12 +57,12 @@ if (argv.D) {
       if (!!item.timeZone) cronOpts.timeZone = item.timeZone;
       
       var job = new CronJob(cronOpts);
-
       job.start();
     });
   } catch (e) {
     console.error('Unable to parse config file', e);
   }
+    console.log('Daemon has started');
 } else {
   var fn = argv.o || argv.d + '/record-' +
     dateFormat(new Date(), 'isoDateTime') + '.mp3';
@@ -72,7 +72,7 @@ if (argv.D) {
 
 function record(filename, url, duration) {
   var spawn = require('child_process').spawn,
-      ffmpeg_opts = ['-i', url, '-loop_input', '-t', duration, '-acodec',
+      ffmpeg_opts = ['-i', url, '-t', duration, '-acodec',
                          'copy', filename],
       recorder  = spawn(FFMPEG, ffmpeg_opts);
   recorder.stderr.setEncoding('utf8');
